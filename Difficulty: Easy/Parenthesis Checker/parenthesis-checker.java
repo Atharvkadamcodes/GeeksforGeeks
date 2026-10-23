@@ -1,35 +1,29 @@
+import java.util.Stack;
+
 class Solution {
     public boolean isBalanced(String s) {
-        // code here
-        if(s.length() % 2 != 0) {
-            return false;
-        }
+        Stack<Character> st = new Stack<>();
 
-        Stack<Character> stack = new Stack<>();
-        int i = 0;
-
-        while(i != s.length()) {
+        for (int i = 0; i < s.length(); i++) {
             char ch = s.charAt(i);
 
-            if(ch =='(' || ch =='[' || ch =='{') {
-                stack.push(ch);
+            if (ch == '(' || ch == '[' || ch == '{') {
+                st.push(ch);
             } else {
-                if(stack.isEmpty()) return false;
+                if (st.isEmpty()) return false;
 
-                char top = stack.pop();
-
-                if(ch == ')' && top != '(') return false;
-                if(ch == ']' && top != '[') return false;
-                if(ch == '}' && top != '{') return false;
+                if (ch == ')' && st.peek() == '(') {
+                    st.pop();
+                } else if (ch == ']' && st.peek() == '[') {
+                    st.pop();
+                } else if (ch == '}' && st.peek() == '{') {
+                    st.pop();
+                } else {
+                    return false;
+                }
             }
-
-            i++;
         }
 
-        if(!stack.isEmpty()) {
-            return false;
-        }
-
-        return true;
+        return st.isEmpty();
     }
 }
