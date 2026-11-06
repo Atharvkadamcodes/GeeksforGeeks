@@ -11,30 +11,29 @@ class Node {
 } */
 
 class Solution {
-    
     class Info {
-        Node node;
         int hd;
+        Node node;
         
-        public Info(Node node, int hd) {
-            this.node = node;
+        public Info(int hd, Node node) {
             this.hd = hd;
+            this.node = node;
         }
     }
     
     public ArrayList<Integer> topView(Node root) {
         // code here
         ArrayList<Integer> list = new ArrayList<>();
-         
+        
+        if(root == null) {
+            return list;
+        }
+        
+        TreeMap<Integer, Node> map = new TreeMap<>();
+        
         Queue<Info> q = new LinkedList<>();
         
-        HashMap<Integer, Node> map = new HashMap<>();
-        
-        if(root == null) return list;
-        
-        int min = 0, max = 0;
-        
-        q.add(new Info(root, 0));
+        q.add(new Info(0, root));
         q.add(null);
         
         while(!q.isEmpty()) {
@@ -52,19 +51,17 @@ class Solution {
                 }
                 
                 if(curr.node.left != null) {
-                    q.add(new Info(curr.node.left, curr.hd - 1));
-                    min = Math.min(min, curr.hd - 1);
+                    q.add(new Info(curr.hd - 1, curr.node.left));
                 }
-
+                
                 if(curr.node.right != null) {
-                    q.add(new Info(curr.node.right, curr.hd + 1));
-                    max = Math.max(max, curr.hd + 1);
+                    q.add(new Info(curr.hd + 1, curr.node.right));
                 }
             }
         }
         
-        for(int i = min; i <= max; i++) {
-            list.add(map.get(i).data);
+        for(int key : map.keySet()) {
+            list.add(map.get(key).data);
         }
         
         return list;
